@@ -51,7 +51,9 @@ fun Main(viewModel: MainViewModel = viewModel()) {
                 fontFamily = JetBrainsMonoFont,
                 fontWeight = FontWeight.Normal,
             )
-            Text("")
+            viewModel.numbersList.forEach { element ->
+                Element(element.number, element.coefficient)
+            }
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 2.dp,
