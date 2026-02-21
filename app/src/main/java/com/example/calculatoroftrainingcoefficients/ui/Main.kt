@@ -27,10 +27,13 @@ import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.calculatoroftrainingcoefficients.core.MainViewModel
 import com.example.calculatoroftrainingcoefficients.ui.theme.JetBrainsMonoFont
 
 @Composable
 fun Main() {
+    val viewModel: MainViewModel = viewModel()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -102,6 +105,7 @@ fun Main() {
         }
     }
 }
+
 @Composable
 fun RowButton(index: String){
     Row(
