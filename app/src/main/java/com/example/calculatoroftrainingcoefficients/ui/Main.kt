@@ -51,9 +51,10 @@ fun Main(viewModel: MainViewModel = viewModel()) {
                 fontFamily = JetBrainsMonoFont,
                 fontWeight = FontWeight.Normal,
             )
-
-            viewModel.numbersList.forEach { element ->
-                Element(element.number, element.coefficient)
+            Row(horizontalArrangement = Arrangement.Start) {
+                viewModel.numbersList.forEach { element ->
+                    Element(element.number, element.coefficient)
+                }
             }
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
@@ -77,6 +78,7 @@ fun Main(viewModel: MainViewModel = viewModel()) {
         RowButton("4", viewModel)
         Spacer(modifier = Modifier.height(40.dp))
         RowButton("5", viewModel)
+
         Row() {
             Button(
                 onClick = {},

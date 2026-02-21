@@ -13,13 +13,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val numbersList = mutableStateListOf<Coefficient>()
 
-    init {
-        val newElement = Coefficient("1", "0.5")
-        val newElement1 = Coefficient("2", "0.2")
-        numbersList.add(newElement)
-        numbersList.add(newElement1)
-    }
-
     fun addElement(num: String, coef: String) {
         viewModelScope.launch {
             val newElement = Coefficient(num, coef)
@@ -29,6 +22,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun calculate(listOfCoefficient: List<Coefficient>) {
-        // Логика расчета
+
     }
 }
