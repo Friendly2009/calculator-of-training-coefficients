@@ -32,8 +32,7 @@ import com.example.calculatoroftrainingcoefficients.core.MainViewModel
 import com.example.calculatoroftrainingcoefficients.ui.theme.JetBrainsMonoFont
 
 @Composable
-fun Main() {
-    val viewModel: MainViewModel = viewModel()
+fun Main(viewModel: MainViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,13 +67,13 @@ fun Main() {
                 style = MaterialTheme.typography.titleLarge)
         }
 
-        RowButton("2")
+        RowButton("2", viewModel)
         Spacer(modifier = Modifier.height(40.dp))
-        RowButton("3")
+        RowButton("3", viewModel)
         Spacer(modifier = Modifier.height(40.dp))
-        RowButton("4")
+        RowButton("4", viewModel)
         Spacer(modifier = Modifier.height(40.dp))
-        RowButton("5")
+        RowButton("5", viewModel)
         Row() {
             Button(
                 onClick = {},
@@ -107,14 +106,16 @@ fun Main() {
 }
 
 @Composable
-fun RowButton(index: String){
+fun RowButton(index: String,viewModel: MainViewModel){
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
-            onClick = {},
+            onClick = {
+                viewModel.addElement(index, "0.1")
+            },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
             shape = RoundedCornerShape(15.dp),
@@ -147,7 +148,9 @@ fun RowButton(index: String){
         }
 
         Button(
-            onClick = {},
+            onClick = {
+                viewModel.addElement(index, "1")
+            },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
             shape = RoundedCornerShape(15.dp),
@@ -179,7 +182,9 @@ fun RowButton(index: String){
             }
         }
         Button(
-            onClick = {},
+            onClick = {
+                viewModel.addElement(index, "1.3")
+            },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
             shape = RoundedCornerShape(15.dp),
@@ -211,7 +216,9 @@ fun RowButton(index: String){
             }
         }
         Button(
-            onClick = {},
+            onClick = {
+                viewModel.addElement(index, "1.5")
+            },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
             shape = RoundedCornerShape(15.dp),
@@ -243,7 +250,9 @@ fun RowButton(index: String){
             }
         }
         Button(
-            onClick = {},
+            onClick = {
+                viewModel.addElement(index, "2")
+            },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
             shape = RoundedCornerShape(15.dp),
