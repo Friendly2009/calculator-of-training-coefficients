@@ -1,6 +1,5 @@
-package com.example.calculatoroftrainingcoefficients.core
-
-class Coefficient(num: String, coef: String) {
-    var number: String = num
-    val coefficient: String = coef
-}
+    package com.example.calculatoroftrainingcoefficients.core
+    data class Coefficient(
+        val number: String,
+        val coefficient: String
+    )

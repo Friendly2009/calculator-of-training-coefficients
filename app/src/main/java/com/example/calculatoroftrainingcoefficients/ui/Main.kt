@@ -51,6 +51,7 @@ fun Main(viewModel: MainViewModel = viewModel()) {
                 fontFamily = JetBrainsMonoFont,
                 fontWeight = FontWeight.Normal,
             )
+
             viewModel.numbersList.forEach { element ->
                 Element(element.number, element.coefficient)
             }
