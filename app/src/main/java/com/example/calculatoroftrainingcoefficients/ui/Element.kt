@@ -1,5 +1,6 @@
 package com.example.calculatoroftrainingcoefficients.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,12 +14,14 @@ import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.calculatoroftrainingcoefficients.core.MainViewModel
 import com.example.calculatoroftrainingcoefficients.ui.theme.JetBrainsMonoFont
 
 @Composable
-fun Element(number: String, coefficient: String){
-    Box(
-        contentAlignment = Alignment.Center) {
+fun Element(index: Int,number: String, coefficient: String, viewModel: MainViewModel){
+    Box(Modifier.clickable(
+        onClick = { viewModel.deleteElement(index) }
+    ),contentAlignment = Alignment.Center) {
         Row(
             verticalAlignment = Alignment.Bottom
         ) {

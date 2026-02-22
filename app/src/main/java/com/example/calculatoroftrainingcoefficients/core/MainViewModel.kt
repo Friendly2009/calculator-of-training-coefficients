@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    val numbersList = mutableStateListOf<Coefficient>()
+    var numbersList = mutableStateListOf<Coefficient>()
     fun addElement(num: String, coef: String) {
         viewModelScope.launch {
             val newElement = Coefficient(num, coef)
@@ -17,5 +17,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun calculate(listOfCoefficient: List<Coefficient>) {
 
+    }
+
+    fun deleteElement(count: Int){
+        viewModelScope.launch {
+            numbersList.removeAt(count)
+        }
     }
 }

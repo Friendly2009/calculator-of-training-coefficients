@@ -35,7 +35,7 @@ import com.example.calculatoroftrainingcoefficients.ui.theme.JetBrainsMonoFont
 
 @Composable
 fun Main(viewModel: MainViewModel = viewModel()) {
-    val horizontalscrollState = rememberScrollState()
+    val horizontalScrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,9 +54,9 @@ fun Main(viewModel: MainViewModel = viewModel()) {
                 fontFamily = JetBrainsMonoFont,
                 fontWeight = FontWeight.Normal,
             )
-            Row(Modifier.horizontalScroll(horizontalscrollState),horizontalArrangement = Arrangement.Start) {
-                viewModel.numbersList.forEach { element ->
-                    Element(element.number, element.coefficient)
+            Row(Modifier.horizontalScroll(horizontalScrollState),horizontalArrangement = Arrangement.Start) {
+                viewModel.numbersList.forEachIndexed {index, element ->
+                    Element(index, element.number, element.coefficient, viewModel)
                 }
             }
             HorizontalDivider(
