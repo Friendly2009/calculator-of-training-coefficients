@@ -70,7 +70,7 @@ fun Main(viewModel: MainViewModel = viewModel()) {
             Text(
                 fontFamily = JetBrainsMonoFont,
                 fontWeight = FontWeight.Normal,
-                text = "5.00000",
+                text = viewModel.result.value.toString(),
                 style = MaterialTheme.typography.titleLarge)
         }
 
@@ -85,7 +85,7 @@ fun Main(viewModel: MainViewModel = viewModel()) {
         Row() {
 
             Button(
-                onClick = {},
+                onClick = { viewModel.calculate()},
                 contentPadding = PaddingValues(8.dp),
                 modifier = Modifier.fillMaxWidth().padding(top = 40.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(15.dp)
