@@ -83,23 +83,11 @@ fun Main(viewModel: MainViewModel = viewModel()) {
         RowButton("5", viewModel)
 
         Row() {
+
             Button(
                 onClick = {},
                 contentPadding = PaddingValues(8.dp),
-                modifier = Modifier.size(width = 175.dp, height = 90.dp).padding(top = 40.dp, end = 5.dp),
-                shape = RoundedCornerShape(15.dp)
-            ) {
-                Text(
-                    text = "Del",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = JetBrainsMonoFont,
-                )
-            }
-            Button(
-                onClick = {},
-                contentPadding = PaddingValues(8.dp),
-                modifier = Modifier.size(width = 183.dp, height = 90.dp).padding(top = 40.dp, start = 16.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 40.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(15.dp)
             ) {
                 Text(
