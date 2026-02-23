@@ -24,14 +24,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         var sumCoefficient = 0.00f
 
         numbersList.forEach { element ->
-            sumIndex += element.number.toFloat()
+            sumIndex += element.number.toFloat() * element.coefficient.toFloat()
             sumCoefficient += element.coefficient.toFloat()
         }
 
-        if (sumCoefficient != 0.00f) {
-            result.value = sumIndex / sumCoefficient
+        result.value = if (sumCoefficient != 0.00f) {
+            String.format("%.2f", sumIndex / sumCoefficient).toFloat()
         } else {
-            result.value = 0.00f
+            0.00f
         }
         Log.i("main", "$result")
     }
