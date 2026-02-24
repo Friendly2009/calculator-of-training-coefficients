@@ -1,5 +1,7 @@
 package com.example.calculatoroftrainingcoefficients.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -34,8 +37,23 @@ import com.example.calculatoroftrainingcoefficients.core.MainViewModel
 import com.example.calculatoroftrainingcoefficients.ui.theme.JetBrainsMonoFont
 
 @Composable
-fun Main(viewModel: MainViewModel = viewModel()) {
+fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
     val horizontalScrollState = rememberScrollState()
+    Row(
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .size(60.dp,60.dp)
+                .padding(top = 20.dp, end = 20.dp)
+                .background(Color.Transparent.copy(alpha = 0.1f), shape = CircleShape)
+                .clickable(onClick = { toSupport() }),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("i")
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +64,7 @@ fun Main(viewModel: MainViewModel = viewModel()) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(50.dp))
             Text(
                 text = "Calculate",
                 style = MaterialTheme.typography.titleLarge,
