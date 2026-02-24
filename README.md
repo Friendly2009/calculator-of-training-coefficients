@@ -18,7 +18,6 @@ This repository contains a mobile application built with **Jetpack Compose**. Th
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
 
 ## Screenshots
-## Screenshots
 
 | ![Screenshot 1](screenshots/photo_1_2026-02-24_15-26-28.jpg) | ![Screenshot 2](screenshots/photo_2_2026-02-24_15-26-28.jpg) |
 |---------------------------------------------------------------|---------------------------------------------------------------|
