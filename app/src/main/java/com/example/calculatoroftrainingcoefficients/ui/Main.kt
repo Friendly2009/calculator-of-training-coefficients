@@ -88,7 +88,7 @@ fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
             Text(
                 fontFamily = JetBrainsMonoFont,
                 fontWeight = FontWeight.Normal,
-                text = viewModel.result.value.toString(),
+                text = String.format("%.2f", viewModel.result),
                 style = MaterialTheme.typography.titleLarge)
         }
 
