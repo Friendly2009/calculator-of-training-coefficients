@@ -101,7 +101,6 @@ fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
         RowButton(5, viewModel)
 
         Row() {
-
             Button(
                 onClick = { viewModel.calculate()},
                 contentPadding = PaddingValues(8.dp),

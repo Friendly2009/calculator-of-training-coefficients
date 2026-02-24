@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     var numbersList = mutableStateListOf<Coefficient>()
-
     var result by mutableStateOf(0f)
     fun addElement(num: Int, coef: Float) {
         viewModelScope.launch {
@@ -19,8 +18,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             numbersList.add(newElement)
         }
     }
-
-
     fun calculate() {
         var sumIndex = 0.0f
         var sumCoefficient = 0.0f
@@ -31,10 +28,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             result = sumIndex/sumCoefficient
         }
     }
-
-
-
-
     fun deleteElement(count: Int){
         viewModelScope.launch {
             numbersList.removeAt(count)
