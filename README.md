@@ -17,6 +17,12 @@ This repository contains a mobile application built with **Jetpack Compose**. Th
 ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
 
+## Screenshots
+![photo_1_2026-02-24_15-26-28.jpg](screenshots/photo_1_2026-02-24_15-26-28.jpg)
+![photo_2_2026-02-24_15-26-28.jpg](screenshots/photo_2_2026-02-24_15-26-28.jpg)
+![photo_3_2026-02-24_15-26-28.jpg](screenshots/photo_3_2026-02-24_15-26-28.jpg)
+![photo_4_2026-02-24_15-26-28.jpg](screenshots/photo_4_2026-02-24_15-26-28.jpg)
+
 ## How It Works
 
 1. User inputs numbers between 2 and 5
