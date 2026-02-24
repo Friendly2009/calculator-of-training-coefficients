@@ -30,8 +30,8 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("support"){
                             SupportScreen(
-                                "support@example.com",
-                                "http://PornHub.com",
+                                "tayler.derden.96@internet.ru",
+                                "https://t.me/Imchelovek09",
                                 { navController.navigate("main")
                             })
                         }
