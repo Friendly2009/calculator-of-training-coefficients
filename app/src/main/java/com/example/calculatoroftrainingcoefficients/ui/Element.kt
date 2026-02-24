@@ -18,7 +18,7 @@ import com.example.calculatoroftrainingcoefficients.core.MainViewModel
 import com.example.calculatoroftrainingcoefficients.ui.theme.JetBrainsMonoFont
 
 @Composable
-fun Element(index: Int,number: String, coefficient: String, viewModel: MainViewModel){
+fun Element(index: Int,number: Int, coefficient: Float, viewModel: MainViewModel){
     Box(Modifier.clickable(
         onClick = { viewModel.deleteElement(index) }
     ),contentAlignment = Alignment.Center) {
@@ -26,7 +26,7 @@ fun Element(index: Int,number: String, coefficient: String, viewModel: MainViewM
             verticalAlignment = Alignment.Bottom
         ) {
             Text(
-                text = number,
+                text = number.toString(),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.alignBy(FirstBaseline),

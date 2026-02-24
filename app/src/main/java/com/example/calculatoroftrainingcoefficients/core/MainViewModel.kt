@@ -12,29 +12,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     var numbersList = mutableStateListOf<Coefficient>()
     var result = mutableFloatStateOf(0.00f)
 
-    fun addElement(num: String, coef: String) {
+    fun addElement(num: Int, coef: Float) {
         viewModelScope.launch {
             val newElement = Coefficient(num, coef)
             numbersList.add(newElement)
         }
     }
 
+
     fun calculate() {
-        var sumIndex = 0.00f
-        var sumCoefficient = 0.00f
 
-        numbersList.forEach { element ->
-            sumIndex += element.number.toFloat() * element.coefficient.toFloat()
-            sumCoefficient += element.coefficient.toFloat()
-        }
-
-        result.value = if (sumCoefficient != 0.00f) {
-            String.format("%.2f", sumIndex / sumCoefficient).toFloat()
-        } else {
-            0.00f
-        }
-        Log.i("main", "$result")
     }
+
+
+
 
     fun deleteElement(count: Int){
         viewModelScope.launch {

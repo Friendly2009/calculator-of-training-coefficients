@@ -92,13 +92,13 @@ fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
                 style = MaterialTheme.typography.titleLarge)
         }
 
-        RowButton("2", viewModel)
+        RowButton(2, viewModel)
         Spacer(modifier = Modifier.height(40.dp))
-        RowButton("3", viewModel)
+        RowButton(3, viewModel)
         Spacer(modifier = Modifier.height(40.dp))
-        RowButton("4", viewModel)
+        RowButton(4, viewModel)
         Spacer(modifier = Modifier.height(40.dp))
-        RowButton("5", viewModel)
+        RowButton(5, viewModel)
 
         Row() {
 
@@ -120,7 +120,7 @@ fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
-fun RowButton(index: String,viewModel: MainViewModel){
+fun RowButton(index: Int,viewModel: MainViewModel){
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -128,7 +128,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
     ) {
         Button(
             onClick = {
-                viewModel.addElement(index, "0.1")
+                viewModel.addElement(index, 0.1f)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -142,7 +142,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = index,
+                        text = index.toString(),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.alignBy(FirstBaseline),
@@ -163,7 +163,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
 
         Button(
             onClick = {
-                viewModel.addElement(index, "1")
+                viewModel.addElement(index, 1f)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -177,7 +177,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = index,
+                        text = index.toString(),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.alignBy(FirstBaseline),
@@ -197,7 +197,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
         }
         Button(
             onClick = {
-                viewModel.addElement(index, "1.3")
+                viewModel.addElement(index, 1.3f)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -211,7 +211,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = index,
+                        text = index.toString(),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.alignBy(FirstBaseline),
@@ -231,7 +231,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
         }
         Button(
             onClick = {
-                viewModel.addElement(index, "1.5")
+                viewModel.addElement(index, 1.5f)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -245,7 +245,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = index,
+                        text = index.toString(),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.alignBy(FirstBaseline),
@@ -265,7 +265,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
         }
         Button(
             onClick = {
-                viewModel.addElement(index, "2")
+                viewModel.addElement(index, 2f)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -279,7 +279,7 @@ fun RowButton(index: String,viewModel: MainViewModel){
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        text = index,
+                        text = index.toString(),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.alignBy(FirstBaseline),
