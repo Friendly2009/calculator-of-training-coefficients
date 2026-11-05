@@ -1,66 +1,56 @@
 package com.example.calculatoroftrainingcoefficients.ui
+
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.calculatoroftrainingcoefficients.R
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SupportScreen(
-    email: String = "support@example.com",
-    telegramLink: String = "https://t.me/your_support_channel",
-    onExitClick: () -> Unit
-) {
+fun SupportScreen(email: String, telegramLink: String, onExitClick: () -> Unit) {
     val context = LocalContext.current
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Support", style = MaterialTheme.typography.titleLarge)
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(text = "Email")
-        Text(
-            text = email,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable {
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    Scaffold(topBar = {
+        TopAppBar(title = { Text(stringResource(R.string.about), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            navigationIcon = { IconButton(onClick = onExitClick, modifier = Modifier.testTag("support_back")) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.back))
+            } })
+    }, snackbarHost = { SnackbarHost(snackbar) }) { padding ->
+        Column(Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding)
+            .verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Text(stringResource(R.string.about_body), style = MaterialTheme.typography.bodyLarge)
+            Card { Text(stringResource(R.string.formula), modifier = Modifier.padding(20.dp)) }
+            Text(stringResource(R.string.state_notice), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            OutlinedButton(onClick = {
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("Email", email)
-                clipboard.setPrimaryClip(clip)
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(text = "Telegram: ")
-        Text(
-            text = telegramLink,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(telegramLink))
-                context.startActivity(intent)
-            }
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Button(onClick = onExitClick) {
-            Text(text = "Exit to app")
+                clipboard.setPrimaryClip(ClipData.newPlainText("Email", email))
+                scope.launch { snackbar.showSnackbar(context.getString(R.string.email_copied)) }
+            }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.copy_email)) }
+            Text(email, style = MaterialTheme.typography.bodyMedium)
+            Button(onClick = {
+                try { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(telegramLink))) }
+                catch (_: ActivityNotFoundException) {
+                    scope.launch { snackbar.showSnackbar(context.getString(R.string.no_link_handler)) }
+                }
+            }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.open_telegram)) }
         }
     }
 }

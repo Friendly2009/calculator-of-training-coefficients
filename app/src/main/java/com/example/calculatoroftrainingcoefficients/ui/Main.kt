@@ -1,300 +1,174 @@
 package com.example.calculatoroftrainingcoefficients.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.FirstBaseline
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.calculatoroftrainingcoefficients.core.MainViewModel
+import com.example.calculatoroftrainingcoefficients.R
+import com.example.calculatoroftrainingcoefficients.core.*
 import com.example.calculatoroftrainingcoefficients.ui.theme.JetBrainsMonoFont
+import kotlinx.coroutines.launch
+
+private val presetWeights = listOf(0.1, 1.0, 1.3, 1.5, 2.0)
 
 @Composable
-fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
-    val horizontalScrollState = rememberScrollState()
-    Row(
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Box(
-            modifier = Modifier
-                .size(60.dp,60.dp)
-                .padding(top = 20.dp, end = 20.dp)
-                .background(Color.Transparent.copy(alpha = 0.1f), shape = CircleShape)
-                .clickable(onClick = { toSupport() }),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("i")
-        }
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Spacer(Modifier.height(50.dp))
-            Text(
-                text = "Calculate",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 4.dp),
-                fontFamily = JetBrainsMonoFont,
-                fontWeight = FontWeight.Normal,
-            )
-            Row(Modifier.horizontalScroll(horizontalScrollState),horizontalArrangement = Arrangement.Start) {
-                viewModel.numbersList.forEachIndexed {index, element ->
-                    Element(element.id, element.number, element.coefficient, viewModel)
-                }
-            }
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 2.dp,
-                color = Color.LightGray
-            )
-        }
-
-        Box(modifier = Modifier.fillMaxHeight(0.3f).fillMaxWidth(), contentAlignment = Alignment.Center){
-            Text(
-                fontFamily = JetBrainsMonoFont,
-                fontWeight = FontWeight.Normal,
-                text = String.format("%.2f", (viewModel.result ?: 0.0)),
-                style = MaterialTheme.typography.titleLarge)
-        }
-
-        RowButton(2, viewModel)
-        Spacer(modifier = Modifier.height(40.dp))
-        RowButton(3, viewModel)
-        Spacer(modifier = Modifier.height(40.dp))
-        RowButton(4, viewModel)
-        Spacer(modifier = Modifier.height(40.dp))
-        RowButton(5, viewModel)
-
-        Row() {
-            Button(
-                onClick = { /* Result updates automatically. */ },
-                contentPadding = PaddingValues(8.dp),
-                modifier = Modifier.fillMaxWidth().padding(top = 40.dp, start = 16.dp, end = 16.dp),
-                shape = RoundedCornerShape(15.dp)
-            ) {
-                Text(
-                    text = "=",
-                    fontSize = 34.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = JetBrainsMonoFont,
-                )
+fun Main(toSupport: () -> Unit, viewModel: MainViewModel = viewModel()) {
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    fun deleted(message: Int, action: () -> Unit) {
+        snackbar.currentSnackbarData?.dismiss()
+        action()
+        scope.launch {
+            if (snackbar.showSnackbar(context.getString(message), context.getString(R.string.undo),
+                    duration = SnackbarDuration.Long) == SnackbarResult.ActionPerformed) {
+                if (!viewModel.undoDelete()) snackbar.showSnackbar(context.getString(R.string.undo_limit, MAX_ENTRIES))
             }
         }
     }
+    CalculatorScreen(
+        entries = viewModel.numbersList,
+        selectedWeight = viewModel.selectedWeight,
+        average = viewModel.result,
+        snackbar = snackbar,
+        onSupport = toSupport,
+        onWeight = viewModel::selectWeight,
+        onAdd = { grade ->
+            if (!viewModel.addElement(grade)) scope.launch {
+                snackbar.showSnackbar(context.getString(R.string.limit_reached, MAX_ENTRIES))
+            }
+        },
+        onDelete = { id -> deleted(R.string.deleted) { viewModel.deleteElement(id) } },
+        onClear = { deleted(R.string.cleared) { viewModel.clear() } },
+        onEdit = viewModel::editElement
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RowButton(index: Int,viewModel: MainViewModel){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Button(
-            onClick = {
-                viewModel.addElement(index, 0.1)
-            },
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.size(width = 60.dp, height = 60.dp),
-            shape = RoundedCornerShape(15.dp),
+fun CalculatorScreen(
+    entries: List<Coefficient>, selectedWeight: Double, average: Double?,
+    snackbar: SnackbarHostState, onSupport: () -> Unit, onWeight: (Double) -> Unit,
+    onAdd: (Int) -> Unit, onDelete: (String) -> Unit, onClear: () -> Unit,
+    onEdit: (String, Int, Double) -> Unit
+) {
+    var customWeight by rememberSaveable { mutableStateOf(false) }
+    var clearConfirmation by rememberSaveable { mutableStateOf(false) }
+    var editingId by rememberSaveable { mutableStateOf<String?>(null) }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.average_title), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                actions = {
+                    IconButton(onClick = onSupport, modifier = Modifier.testTag("support")) {
+                        Icon(Icons.Outlined.Info, stringResource(R.string.about))
+                    }
+                }
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbar) }
+    ) { padding ->
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(padding).consumeWindowInsets(padding).testTag("calculator_list"),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Bottom
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                 ) {
-                    Text(
-                        text = index.toString(),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont,
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "x0.1",
-                        fontSize = 10.sp,
-                        modifier = Modifier
-                            .offset(y = 4.dp)
-                            .alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont,
-                    )
+                    Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(stringResource(R.string.result_label), style = MaterialTheme.typography.labelLarge)
+                        BoxWithConstraints(Modifier.fillMaxWidth()) {
+                            val text = formatAverage(average)
+                            val size = minOf(57f, maxWidth.value / (text.length * 0.65f * LocalDensity.current.fontScale)).sp
+                            Text(text, fontFamily = JetBrainsMonoFont, fontSize = size,
+                                lineHeight = (size.value * 1.15f).sp, maxLines = 1, modifier = Modifier.testTag("average"))
+                        }
+                        Text(if (entries.isEmpty()) stringResource(R.string.empty_hint)
+                            else stringResource(R.string.entry_count, entries.size), style = MaterialTheme.typography.bodyMedium)
+                    }
                 }
             }
-        }
-
-        Button(
-            onClick = {
-                viewModel.addElement(index, 1.0)
-            },
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.size(width = 60.dp, height = 60.dp),
-            shape = RoundedCornerShape(15.dp),
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = index.toString(),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "x1",
-                        fontSize = 12.sp,
-                        modifier = Modifier
-                            .offset(y = 4.dp)
-                            .alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.weight_title), style = MaterialTheme.typography.titleMedium)
+                    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        presetWeights.forEach { weight ->
+                            FilterChip(selected = selectedWeight == weight, onClick = { onWeight(weight) },
+                                label = { Text("×${formatWeight(weight)}") }, modifier = Modifier.testTag("weight_$weight"))
+                        }
+                        FilterChip(selected = selectedWeight !in presetWeights, onClick = { customWeight = true },
+                            label = { Text(if (selectedWeight in presetWeights) stringResource(R.string.custom_weight)
+                                else stringResource(R.string.custom_selected, formatWeight(selectedWeight))) },
+                            modifier = Modifier.testTag("custom_weight"))
+                    }
                 }
             }
-        }
-        Button(
-            onClick = {
-                viewModel.addElement(index, 1.3)
-            },
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.size(width = 60.dp, height = 60.dp),
-            shape = RoundedCornerShape(15.dp),
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = index.toString(),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "x1.3",
-                        fontSize = 10.sp,
-                        modifier = Modifier
-                            .offset(y = 4.dp)
-                            .alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(stringResource(R.string.grade_title), style = MaterialTheme.typography.titleMedium)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        (2..5).forEach { grade ->
+                            val description = stringResource(R.string.add_grade, grade, formatWeight(selectedWeight))
+                            FilledTonalButton(onClick = { onAdd(grade) }, contentPadding = PaddingValues(8.dp),
+                                modifier = Modifier.weight(1f).heightIn(min = 64.dp).testTag("add_$grade")
+                                    .semantics { contentDescription = description }) {
+                                Text("$grade", style = MaterialTheme.typography.headlineMedium)
+                            }
+                        }
+                    }
                 }
             }
-        }
-        Button(
-            onClick = {
-                viewModel.addElement(index, 1.5)
-            },
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.size(width = 60.dp, height = 60.dp),
-            shape = RoundedCornerShape(15.dp),
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = index.toString(),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "x1.5",
-                        fontSize = 10.sp,
-                        modifier = Modifier
-                            .offset(y = 4.dp)
-                            .alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
+            item {
+                Column {
+                    Text(stringResource(R.string.entries_title), style = MaterialTheme.typography.titleMedium)
+                    if (entries.isNotEmpty()) TextButton(onClick = { clearConfirmation = true }, modifier = Modifier.testTag("clear")) {
+                        Text(stringResource(R.string.clear_all))
+                    }
                 }
             }
-        }
-        Button(
-            onClick = {
-                viewModel.addElement(index, 2.0)
-            },
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.size(width = 60.dp, height = 60.dp),
-            shape = RoundedCornerShape(15.dp),
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = index.toString(),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "x2",
-                        fontSize = 10.sp,
-                        modifier = Modifier
-                            .offset(y = 4.dp)
-                            .alignBy(FirstBaseline),
-                        fontFamily = JetBrainsMonoFont
-                    )
-                }
+            if (entries.isEmpty()) item {
+                Text(stringResource(R.string.empty_entries), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            items(entries, key = { it.id }) { entry ->
+                GradeEntry(entry, onEdit = { editingId = entry.id }, onDelete = { onDelete(entry.id) })
             }
         }
     }
+    if (customWeight) WeightDialog(selectedWeight, onDismiss = { customWeight = false }) {
+        onWeight(it); customWeight = false
+    }
+    entries.firstOrNull { it.id == editingId }?.let { entry ->
+        EditGradeDialog(entry, onDismiss = { editingId = null }) { grade, weight ->
+            onEdit(entry.id, grade, weight); editingId = null
+        }
+    }
+    if (clearConfirmation) AlertDialog(
+        onDismissRequest = { clearConfirmation = false },
+        title = { Text(stringResource(R.string.clear_title)) },
+        text = { Text(stringResource(R.string.clear_body)) },
+        confirmButton = { TextButton(onClick = { onClear(); clearConfirmation = false }, modifier = Modifier.testTag("confirm_clear")) {
+            Text(stringResource(R.string.clear_all))
+        } },
+        dismissButton = { TextButton(onClick = { clearConfirmation = false }) { Text(stringResource(R.string.cancel)) } }
+    )
 }
