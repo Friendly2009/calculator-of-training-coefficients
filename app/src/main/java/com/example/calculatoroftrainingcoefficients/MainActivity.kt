@@ -25,14 +25,14 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "main") {
                         composable("main"){
                             Main({
-                                navController.navigate("support")
+                                navController.navigate("support") { launchSingleTop = true }
                             })
                         }
                         composable("support"){
                             SupportScreen(
                                 "tayler.derden.96@internet.ru",
                                 "https://t.me/Imchelovek09",
-                                { navController.navigate("main")
+                                { navController.popBackStack()
                             })
                         }
                     }

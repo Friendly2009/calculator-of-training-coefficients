@@ -74,7 +74,7 @@ fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
             )
             Row(Modifier.horizontalScroll(horizontalScrollState),horizontalArrangement = Arrangement.Start) {
                 viewModel.numbersList.forEachIndexed {index, element ->
-                    Element(index, element.number, element.coefficient, viewModel)
+                    Element(element.id, element.number, element.coefficient, viewModel)
                 }
             }
             HorizontalDivider(
@@ -88,7 +88,7 @@ fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
             Text(
                 fontFamily = JetBrainsMonoFont,
                 fontWeight = FontWeight.Normal,
-                text = String.format("%.2f", viewModel.result),
+                text = String.format("%.2f", (viewModel.result ?: 0.0)),
                 style = MaterialTheme.typography.titleLarge)
         }
 
@@ -102,7 +102,7 @@ fun Main(toSupport: () ->  Unit ,viewModel: MainViewModel = viewModel()) {
 
         Row() {
             Button(
-                onClick = { viewModel.calculate()},
+                onClick = { /* Result updates automatically. */ },
                 contentPadding = PaddingValues(8.dp),
                 modifier = Modifier.fillMaxWidth().padding(top = 40.dp, start = 16.dp, end = 16.dp),
                 shape = RoundedCornerShape(15.dp)
@@ -127,7 +127,7 @@ fun RowButton(index: Int,viewModel: MainViewModel){
     ) {
         Button(
             onClick = {
-                viewModel.addElement(index, 0.1f)
+                viewModel.addElement(index, 0.1)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -162,7 +162,7 @@ fun RowButton(index: Int,viewModel: MainViewModel){
 
         Button(
             onClick = {
-                viewModel.addElement(index, 1f)
+                viewModel.addElement(index, 1.0)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -196,7 +196,7 @@ fun RowButton(index: Int,viewModel: MainViewModel){
         }
         Button(
             onClick = {
-                viewModel.addElement(index, 1.3f)
+                viewModel.addElement(index, 1.3)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -230,7 +230,7 @@ fun RowButton(index: Int,viewModel: MainViewModel){
         }
         Button(
             onClick = {
-                viewModel.addElement(index, 1.5f)
+                viewModel.addElement(index, 1.5)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
@@ -264,7 +264,7 @@ fun RowButton(index: Int,viewModel: MainViewModel){
         }
         Button(
             onClick = {
-                viewModel.addElement(index, 2f)
+                viewModel.addElement(index, 2.0)
             },
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.size(width = 60.dp, height = 60.dp),
