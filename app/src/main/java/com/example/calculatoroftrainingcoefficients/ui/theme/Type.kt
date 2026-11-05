@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.example.calculatoroftrainingcoefficients.R
 
 val JetBrainsMonoFont = FontFamily(
-    Font(R.font.jetbrains_mono, FontWeight.Normal)
+    Font(R.font.jetbrainsmonoregular, FontWeight.Normal)
 )
 val Typography = Typography(
     bodyLarge = TextStyle(
