@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Средний балл</string>
+    <string name="average_title">Средний балл</string>
+    <string name="about">О приложении</string>
+    <string name="back">Назад</string>
+    <string name="result_label">С учётом коэффициентов</string>
+    <string name="empty_hint">Выберите коэффициент и нажмите оценку</string>
+    <string name="entry_count">Оценок: %1$d</string>
+    <string name="weight_title">Коэффициент</string>
+    <string name="custom_weight">Свой</string>
+    <string name="custom_selected">Свой: ×%1$s</string>
+    <string name="grade_title">Добавить оценку</string>
+    <string name="add_grade">Добавить оценку %1$d с коэффициентом %2$s</string>
+    <string name="entries_title">Добавленные оценки</string>
+    <string name="clear_all">Очистить всё</string>
+    <string name="empty_entries">Оценок пока нет. Средний балл пересчитывается автоматически.</string>
+    <string name="entry_weight">Коэффициент ×%1$s</string>
+    <string name="edit_entry">Изменить оценку %1$d, коэффициент %2$s</string>
+    <string name="delete_entry">Удалить оценку %1$d, коэффициент %2$s</string>
+    <string name="deleted">Оценка удалена</string>
+    <string name="cleared">Все оценки удалены</string>
+    <string name="undo">Отменить</string>
+    <string name="limit_reached">Не больше %1$d оценок в одном расчёте</string>
+    <string name="undo_limit">Не удалось отменить: будет превышен лимит %1$d оценок</string>
+    <string name="clear_title">Очистить расчёт?</string>
+    <string name="clear_body">Все добавленные оценки будут удалены.</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="weight_label">Коэффициент</string>
+    <string name="weight_help">Число больше 0 и не больше 1000. Можно использовать точку или запятую.</string>
+    <string name="weight_error">Введите число больше 0 и не больше 1000</string>
+    <string name="edit_title">Изменить оценку</string>
+    <string name="grade_label">Оценка</string>
+    <string name="about_body">Расчёт средневзвешенного балла оценок от 2 до 5. Выберите коэффициент и нажмите оценку. Нажмите добавленную оценку, чтобы изменить её.</string>
+    <string name="formula">Средний балл = сумма (оценка × коэффициент) / сумма коэффициентов</string>
+    <string name="state_notice">Текущий расчёт восстанавливается при пересоздании приложения Android. Это не постоянная история и не правило выставления итоговой оценки.</string>
+    <string name="copy_email">Скопировать email поддержки</string>
+    <string name="email_copied">Email скопирован</string>
+    <string name="open_telegram">Написать в Telegram</string>
+    <string name="no_link_handler">Не найдено приложение для открытия ссылки</string>
+</resources>

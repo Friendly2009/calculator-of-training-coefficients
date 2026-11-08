@@ -1,46 +1,88 @@
+# Средний балл / Weighted Grade Average
 
+Android-приложение на Kotlin и Jetpack Compose для расчёта средневзвешенного балла оценок от **2 до 5**. Работает локально, без аккаунта и сервера. Основная ветка репозитория — `master`.
 
-# Mobile App for Weighted Average Calculation
+## Использование
 
-This repository contains a mobile application built with **Jetpack Compose**. The main feature of the app is to calculate the weighted arithmetic mean of numbers ranging from 2 to 5 with different coefficients.
+1. Выберите коэффициент: **0,1 · 1 · 1,3 · 1,5 · 2** или «Свой».
+2. Нажмите оценку **2, 3, 4 или 5**. Выбранный вес сохраняется для следующих нажатий.
+3. Средний балл пересчитывается автоматически; отдельной кнопки `=` нет.
+4. Нажмите добавленную оценку, чтобы изменить оценку или её коэффициент.
+5. Для удаления используйте значок корзины. В сообщении внизу есть «Отменить».
+6. «Очистить всё» требует подтверждения и также поддерживает временную отмену.
 
-## Features
+Интерфейс прокручивается и учитывает системные отступы. Поддерживаются светлая и тёмная темы. Для русской локали устройства используется русский язык, по умолчанию — английский. На экране информации доступны формула и поддержка.
 
-- Input numbers from 2 to 5
-- Assign custom coefficients (weights) to each number
-- Calculate the weighted average based on inputs and coefficients
-- Simple and intuitive UI designed with Jetpack Compose
+## Формула и ограничения
 
-## Build with
+Средний балл = сумма (оценка × коэффициент) / сумма коэффициентов.
 
-![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
-![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
-![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)
+Например, `2 × 1` и `5 × 2` дают `(2 + 10) / (1 + 2) = 4,00`.
 
-## Screenshots
+- Оценки: только целые значения 2–5.
+- Вес: конечное число **больше 0 и не больше 1000**. Поддерживаются точка и запятая; разделители тысяч не поддерживаются.
+- Максимум **500 оценок**, чтобы ограничить размер восстанавливаемого состояния Android.
+- Расчёт использует `Double` без промежуточного округления; перед суммированием веса масштабируются для устойчивости при очень малых значениях.
+- Только отображение округляется до двух знаков по правилу `HALF_UP`. Десятичный разделитель соответствует локали устройства.
+- Пустой список показывает `—`.
+- Это средний балл, а не правило выставления итоговой оценки в конкретной школе.
+- Отмена восстанавливает последнее удаление или очистку, сохраняя последующие добавления. Если восстановление превысит лимит 500, оно отклоняется с сообщением; записи не отбрасываются молча.
 
-| ![Screenshot 1](screenshots/photo_1_2026-02-24_15-26-28.jpg) | ![Screenshot 2](screenshots/photo_2_2026-02-24_15-26-28.jpg) |
-|---------------------------------------------------------------|---------------------------------------------------------------|
-| ![Screenshot 3](screenshots/photo_3_2026-02-24_15-26-28.jpg) | ![Screenshot 4](screenshots/photo_4_2026-02-24_15-26-28.jpg) |
+## Восстановление состояния
 
+Текущие оценки и выбранный коэффициент хранятся через `SavedStateHandle` и восстанавливаются при пересоздании Activity или восстановлении Android-задачи после уничтожения процесса системой.
 
-## How It Works
+Это **не постоянная история**: после удаления задачи из недавних приложений, принудительной остановки или нового запуска сохранение не гарантируется. Временная отмена удаления не сохраняется после уничтожения процесса.
 
-1. User inputs numbers between 2 and 5
-2. User sets the coefficient (weight) for each number
-3. The app calculates the weighted average using the formula:
+## Сборка
 
-   weighted_average = (n1 * c1 + n2 * c2 + ... + nk * ck) / (c1 + c2 + ... + ck)
+Требуются:
 
-4. Result is displayed on the screen
+- Android Studio с поддержкой Android Gradle Plugin **9.0.1**;
+- **JDK 17** для запуска Gradle;
+- Android SDK Platform **36** и Build Tools **36.0.0**;
+- Android **7.0 / API 24** или новее на устройстве;
+- сеть для загрузки Gradle, Google Maven и Maven Central при первой сборке.
 
-## Installation and Usage
+Wrapper использует Gradle **9.1.0** с проверкой SHA-256. Compose Compiler **2.2.10** согласован со встроенным Kotlin AGP 9.0.1. Уровень Java-байткода 11 в `compileOptions` не заменяет требование JDK 17 для запуска Gradle. Версии зависимостей находятся в `gradle/libs.versions.toml`.
 
-1. Clone the repository
-2. Open the project in Android Studio
-3. Build and run the app on an emulator or device
-4. Enter numbers and their coefficients to see the weighted average calculation
+Откройте проект в Android Studio, выберите Gradle JDK 17 и установите SDK. Путь к SDK задаётся через `ANDROID_HOME` или `sdk.dir` в локальном `local.properties`. Этот файл не нужно коммитить.
 
-## License
+Linux/macOS:
 
-This project is open source and available under the MIT License.
+```bash
+./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest
+./gradlew connectedDebugAndroidTest
+```
+
+Windows PowerShell:
+
+```powershell
+.\gradlew.bat testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest
+.\gradlew.bat connectedDebugAndroidTest
+```
+
+Для `connectedDebugAndroidTest` нужен запущенный эмулятор или подключённый телефон с разрешённой USB-отладкой. После успешной сборки debug APK находится в `app/build/outputs/apk/debug/app-debug.apk`.
+
+## Проверки
+
+- `WeightedAverageTest`: формула, пустой список, малые веса, повторяющиеся оценки, недопустимые данные, десятичные разделители, округление и локаль.
+- `CalculatorStateTest`: удаление последней оценки, отмена с последующими добавлениями, редактирование, восстановление через Bundle/Parcel, некорректное сохранённое состояние и лимит записей.
+- `CalculatorScreenTest`: автоматический расчёт, очистка и отмена, возврат из поддержки, пересоздание Activity и ввод произвольного коэффициента.
+- GitHub Actions запускает unit-тесты, lint, debug-сборку, компиляцию Android-тестов и отдельный прогон на эмуляторе API 35.
+
+Дополнительно проверяйте ширину 320 dp, альбомную ориентацию, масштаб шрифта 200%, обе темы и TalkBack. Наличие тестов само по себе не означает успешного прогона: проверяйте фактические результаты Gradle/CI.
+
+Изображения в `screenshots/` показывают **старый интерфейс до переработки**. Они оставлены как исторические материалы и не описывают текущий экран.
+
+## Структура
+
+- `core/` — модель, формула, форматирование и ViewModel.
+- `ui/` — калькулятор, строки оценок, диалоги и экран поддержки.
+- `ui/theme/` — палитры и типографика.
+- `app/src/test/` — JVM-тесты.
+- `app/src/androidTest/` — проверки состояния Android и UI.
+
+## Лицензия
+
+MIT — см. [LICENSE](LICENSE).

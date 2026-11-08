@@ -2,47 +2,36 @@ package com.example.calculatoroftrainingcoefficients.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val DarkColors = darkColorScheme(
+    primary = LightBlue, onPrimary = Color(0xFF003064),
+    primaryContainer = Color(0xFF17365F), onPrimaryContainer = Color(0xFFDFEAFF),
+    secondaryContainer = Color(0xFF29374C), onSecondaryContainer = PaleBlue,
+    background = Graphite, surface = Graphite,
+    onSurface = Color(0xFFE3E5EB), onBackground = Color(0xFFE3E5EB)
 )
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val LightColors = lightColorScheme(
+    primary = Blue, onPrimary = Color.White,
+    primaryContainer = PaleBlue, onPrimaryContainer = Color(0xFF112E54),
+    secondaryContainer = Color(0xFFE5ECF7), onSecondaryContainer = Color(0xFF25364E),
+    background = Paper, surface = Paper, onSurface = Ink, onBackground = Ink
 )
 
 @Composable
 fun CalculatorOfTrainingCoefficientsTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    darkTheme: Boolean = isSystemInDarkTheme(), dynamicColor: Boolean = false, content: @Composable () -> Unit
 ) {
-
-
-    val colorScheme = when {
+    val colors = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> DarkColors
+        else -> LightColors
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    MaterialTheme(colorScheme = colors, typography = Typography, content = content)
 }

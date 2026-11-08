@@ -1,3 +1,41 @@
 <resources>
-    <string name="app_name">calculator of training coefficients</string>
+    <string name="app_name">Grade average</string>
+    <string name="average_title">Weighted average</string>
+    <string name="about">About and support</string>
+    <string name="back">Back</string>
+    <string name="result_label">With grade weights</string>
+    <string name="empty_hint">Choose a weight, then tap a grade</string>
+    <string name="entry_count">%1$d grades</string>
+    <string name="weight_title">Weight</string>
+    <string name="custom_weight">Custom</string>
+    <string name="custom_selected">Custom: ×%1$s</string>
+    <string name="grade_title">Add a grade</string>
+    <string name="add_grade">Add grade %1$d with weight %2$s</string>
+    <string name="entries_title">Added grades</string>
+    <string name="clear_all">Clear all</string>
+    <string name="empty_entries">No grades yet. Your average updates automatically.</string>
+    <string name="entry_weight">Weight ×%1$s</string>
+    <string name="edit_entry">Edit grade %1$d, weight %2$s</string>
+    <string name="delete_entry">Delete grade %1$d, weight %2$s</string>
+    <string name="deleted">Grade deleted</string>
+    <string name="cleared">All grades deleted</string>
+    <string name="undo">Undo</string>
+    <string name="limit_reached">Limit: %1$d grades per calculation</string>
+    <string name="undo_limit">Cannot undo: the calculation would exceed %1$d grades</string>
+    <string name="clear_title">Clear the calculation?</string>
+    <string name="clear_body">All added grades will be removed.</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="weight_label">Weight</string>
+    <string name="weight_help">A number greater than 0 and at most 1000. Dot or comma accepted.</string>
+    <string name="weight_error">Enter a number greater than 0 and at most 1000</string>
+    <string name="edit_title">Edit grade</string>
+    <string name="grade_label">Grade</string>
+    <string name="about_body">Calculate the weighted average of grades from 2 to 5. Select a weight and tap a grade to add it. Tap an added grade to edit it.</string>
+    <string name="formula">Average = sum of (grade × weight) / sum of weights</string>
+    <string name="state_notice">The current calculation is restored when Android recreates the app. It is not a saved history or a school grading rule.</string>
+    <string name="copy_email">Copy support email</string>
+    <string name="email_copied">Email copied</string>
+    <string name="open_telegram">Contact via Telegram</string>
+    <string name="no_link_handler">No application can open this link</string>
 </resources>
